@@ -1,0 +1,45 @@
+---
+# defaults file for munin
+
+# Possible: cron cgi
+# TODO - generate config nginx/apache2
+munin_graph_strategy: cron
+munin_graph_cgi_processes: 6
+munin_graph_cgi_url: /munin-cgi/munin-cgi-graph
+munin_graph_cgi_tmp: /var/lib/munin/cgi-tmp
+# Possible: cron cgi
+# TODO - generate config nginx/apache2
+munin_html_strategy: cron
+
+munin_update_processes: 16
+
+munin_max_size_x: 4000
+munin_max_size_y: 4000
+# Possible: second minue hour
+munin_graph_period: second
+
+munin_update_user: munin
+munin_update_group: munin
+# TODO fix when CGI
+www-data_cgi_user: www-data
+www-data_cgi_group: www-data
+
+
+# TODO
+munin_rrdcached: False
+munin_rrdcached_socket: /var/run/rrdcached.sock
+
+# Data directories
+
+munin_dbdir: /var/lib/munin
+munin_htmldir: /var/cache/munin/www
+munin_logdir: /var/log/munin
+munin_rundir:  /var/run/munin
+munin_tmpldir: /etc/munin/templates
+munin_staticdir: /etc/munin/static
+
+
+# Contacts list - please remove [] when contacts added
+munin_contacts: []
+#    - name: nagios
+#      command: mail -s "Munin notification" somejuser@fnord.comm

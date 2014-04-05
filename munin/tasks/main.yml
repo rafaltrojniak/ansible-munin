@@ -1,0 +1,12 @@
+---
+# tasks file for munin
+- name: "Install munin package"
+  apt: pkg=munin=2.0.19-2~bpo70+1,munin-common=2.0.19-2~bpo70+1 state=present
+
+- name: Generate main configuration
+  template:
+      src=munin.conf.j2
+      dest=/etc/munin/munin.conf
+      owner=root
+      group=munin
+      mode=644
