@@ -1,6 +1,11 @@
 ---
 # tasks file for munin
-- name: "Install munin package"
+- name: Pre-requirements
+  apt: pkg={{ item }} state=present
+  with_items:
+    - python-pycurl
+
+- name: Install munin package
   apt: pkg=munin=2.0.19-2~bpo70+1,munin-common=2.0.19-2~bpo70+1 state=present
 
 - name: Generate main configuration
@@ -10,3 +15,27 @@
       owner=root
       group=munin
       mode=644
+
+- name: Generate nginx target configuration
+  template:
+      src=nginx.conf.j2
+      dest=/etc/munin/nginx.conf
+      owner=root
+      group=root
+      mode=644
+  notify: Reload nginx
+
+- name: Create and chown directories
+  include: directories.yml
+
+- name: CGI mode configuration
+  include: cgi.yml
+  when: munin_cgi == True
+
+- name: CGI mode cache configuration
+  include: nginx_cache.yml
+  when: munin_cgi_cache == True
+
+- name: RRDCached configuration
+  include: rrdcached.yml
+  when: munin_rrdcached == True

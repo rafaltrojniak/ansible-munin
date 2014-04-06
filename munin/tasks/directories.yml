@@ -1,0 +1,47 @@
+---
+# TODO check if group ownership for munin is needed
+- name: Create directory for logs, set perrmissions
+  file:
+    path: "{{ munin_logdir }}"
+    owner: "{{ munin_update_user }}"
+    group: "adm"
+    state: directory
+    mode: "755"
+
+- name: Create directory for data, set permissions
+  file:
+    path: "{{ munin_dbdir }}"
+    owner: "{{ munin_update_user }}"
+    group: "{{ munin_update_group}}"
+    state: directory
+    mode: "755"
+
+- name: Create directory for html files, set permissions
+  file:
+    path: "{{ munin_htmldir }}"
+    owner: "{{ munin_update_user }}"
+    group: "root"
+    state: directory
+    mode: "755"
+
+- name: Create cgi temporary directory, set permissions
+  file:
+    path: "{{ munin_graph_cgi_tmp}}"
+    owner: "{{ munin_update_user }}"
+    group: "{{ munin_cgi_group }}"
+    state: directory
+    mode: "775"
+
+# CGI logfiles - www-data cannot create it itself
+- name: Create logfiles for cgi, set permissions and ownership
+  file:
+    path: "{{ munin_logdir }}/{{ item }}"
+    owner: "{{ munin_cgi_user }}"
+    group: "adm"
+    state: touch
+    mode: "640"
+  with_items:
+    - munin-cgi-html.log
+    - munin-cgi-graph.log
+  changed_when: False
+  when: munin_cgi == True

@@ -1,0 +1,17 @@
+---
+- name: Configura nginx cache
+  copy:
+      src=nginx_cache.conf
+      dest=/etc/nginx/conf.d/munin_cache.conf
+      mode=644
+      owner=root
+      group=root
+
+- name: Create cache directory
+  file:
+      path=/var/cache/nginx
+      owner=www-data
+      group=adm
+      mode=750
+      state=directory
+  notify: Reload nginx

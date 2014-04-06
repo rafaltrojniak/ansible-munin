@@ -1,0 +1,33 @@
+root {{ munin_htmldir }};
+
+{% if munin_cgi == True %}
+# Is it needed ?
+index index.html;
+
+location /static/ {
+    root {{ munin_htmldir }};
+}
+
+
+location {{ munin_graph_cgi_url }} {
+    include        /etc/nginx/fcgiwrap.conf;
+    fastcgi_pass  unix:/var/run/fcgiwrap.socket;
+    fastcgi_split_path_info ^({{ munin_graph_cgi_url }})(.*);
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param SCRIPT_FILENAME  /usr/lib/munin/cgi/munin-cgi-graph;
+{% if munin_cgi_cache == True %}
+    proxy_cache munin-graph;
+{% endif %}
+}
+
+location / {
+    include        /etc/nginx/fcgiwrap.conf;
+    fastcgi_pass  unix:/var/run/fcgiwrap.socket;
+    fastcgi_param PATH_INFO $request_uri;
+    fastcgi_param SCRIPT_FILENAME  /usr/lib/munin/cgi/munin-cgi-html;
+{% if munin_cgi_cache == True %}
+    proxy_cache munin-html;
+{% endif %}
+}
+
+{% endif %}

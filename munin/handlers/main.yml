@@ -1,2 +1,10 @@
 ---
 # handlers file for munin
+- name: Reload nginx
+  service: name=nginx state=reloaded
+
+- name: Restart rrdcached
+  service: name=rrdcached state=restarted
+
+- name: Restart Fcgiwrap
+  service: name=fcgiwrap state=restarted

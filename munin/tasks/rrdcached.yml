@@ -1,0 +1,22 @@
+---
+- name: Install RRDcached
+  apt: name=rrdcached state=present
+
+- name: Create rrdcached group
+  group: name={{ munin_rrdcached_group }} state=present system=true
+
+- name: Ensure uses are in {{ munin_rrdcached_group }} group
+  user: name={{item}} groups={{ munin_rrdcached_group }} append=yes
+  with_items:
+    - www-data
+    - munin
+  notify: Restart Fcgiwrap
+
+- name: Generate rrdcached debian configuration
+  template:
+    src=rrdcached.j2
+    dest=/etc/default/rrdcached
+    owner=root
+    group=root
+    mode=644
+  notify: Restart rrdcached

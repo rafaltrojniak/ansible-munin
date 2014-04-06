@@ -1,0 +1,15 @@
+# Ansible managed
+# /etc/default/rrdcached
+DISABLE=0
+
+OPTS=" -s {{ munin_rrdcached_group }}\
+  -m 660\
+  -b {{ munin_dbdir }} \
+ {% for x,y in munin_rrdcached_opts.iteritems() %}
+ -{{ x }} {{ y }} \
+ {% endfor %}
+ -l unix:{{ munin_rrdcached_socket }}"
+
+MAXWAIT=30
+
+ENABLE_COREFILES=0

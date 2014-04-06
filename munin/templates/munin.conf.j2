@@ -7,9 +7,13 @@ staticdir {{ munin_staticdir }}
 
 graph_period {{ munin_graph_period }}
 
-graph_strategy {{ munin_graph_strategy }}
 
-{% if munin_graph_strategy  == 'cgi' %}
+{% if munin_cgi == False %}
+graph_strategy cron
+html_strategy cron
+{% else %}
+graph_strategy cgi
+html_strategy cgi
 
 munin_cgi_graph_jobs {{ munin_graph_cgi_processes }}
 cgiurl_graph {{ munin_graph_cgi_url }}
@@ -19,7 +23,6 @@ cgitmpdir {{ munin_graph_cgi_tmp }}
 max_size_x {{ munin_max_size_x }}
 max_size_y {{ munin_max_size_y }}
 
-html_strategy {{ munin_html_strategy }}
 
 max_processes {{ munin_update_processes }}
 
