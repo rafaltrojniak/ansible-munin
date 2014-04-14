@@ -5,8 +5,13 @@
   with_items:
     - python-pycurl
 
+# For using cgi - i preffer versions  >=2.0.19
 - name: Install munin package
-  apt: pkg=munin=2.0.19-2~bpo70+1,munin-common=2.0.19-2~bpo70+1 state=present
+  apt: pkg=munin,munin-common state=present
+
+# TODO Pick one of the nginx roles and use it as dependency
+- name: Install nginx package
+  apt: pkg=nginx state=present
 
 - name: Generate main configuration
   template:
